@@ -8,7 +8,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(FetchContent)
 
 set(POLYCPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(POLYCPP_VARY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(POLYCPP_SOURCE_DIR "" CACHE PATH "Path to a local polycpp checkout")
+set(POLYCPP_VARY_SOURCE_DIR "" CACHE PATH "Path to a local polycpp/vary checkout")
 
 if(NOT POLYCPP_SOURCE_DIR AND EXISTS "/data/repo/polycpp/CMakeLists.txt")
     set(POLYCPP_SOURCE_DIR "/data/repo/polycpp" CACHE PATH "Path to a local polycpp checkout" FORCE)
@@ -26,10 +28,27 @@ else()
 endif()
 FetchContent_MakeAvailable(polycpp)
 
+if(NOT POLYCPP_VARY_SOURCE_DIR AND EXISTS "/data/work/lib/vary/CMakeLists.txt")
+    set(POLYCPP_VARY_SOURCE_DIR "/data/work/lib/vary" CACHE PATH "Path to a local polycpp/vary checkout" FORCE)
+endif()
+
+if(POLYCPP_VARY_SOURCE_DIR AND EXISTS "${POLYCPP_VARY_SOURCE_DIR}/CMakeLists.txt")
+    FetchContent_Declare(polycpp_vary SOURCE_DIR "${POLYCPP_VARY_SOURCE_DIR}")
+else()
+    FetchContent_Declare(
+        polycpp_vary
+        GIT_REPOSITORY https://github.com/polycpp/vary.git
+        GIT_TAG        master
+        GIT_SHALLOW    TRUE
+    )
+endif()
+FetchContent_MakeAvailable(polycpp_vary)
+
 add_library(polycpp_cors
     src/cors.cpp
 )
 target_link_libraries(polycpp_cors PUBLIC polycpp)
+target_link_libraries(polycpp_cors PUBLIC polycpp_vary)
 target_include_directories(polycpp_cors PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>

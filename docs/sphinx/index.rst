@@ -1,44 +1,57 @@
 cors
 ====
 
-**C++ companion port of cors**
+**Apply CORS response policy with polycpp HTTP types.**
 
-Generated planning documentation for the cors companion library. Replace placeholder user pages as APIs, examples, and tests become real.
+``polycpp::cors`` is a C++20 companion port of the npm ``cors`` package. It
+keeps the upstream header behavior for static policies while replacing the
+JavaScript middleware factory with explicit C++ policy evaluation and response
+adapters.
 
 .. code-block:: cpp
 
    #include <polycpp/cors/cors.hpp>
 
+   polycpp::http::Headers request_headers;
+   request_headers.set("Origin", "https://app.example");
+
+   polycpp::cors::CorsOptions options;
+   options.origin = polycpp::cors::OriginSetting::reflect();
+
+   auto result = polycpp::cors::evaluate("GET", request_headers, options);
+
 .. grid:: 2
 
-   .. grid-item-card:: Drop-in familiarity
+   .. grid-item-card:: Pure policy result
       :margin: 1
 
-      Keep the C++ API close to the npm package where that improves migration, and record deliberate C++ adaptations in docs/divergences.md.
+      ``evaluate`` returns headers and preflight control-flow decisions without
+      mutating caller-owned response state.
 
-   .. grid-item-card:: C++20 native
+   .. grid-item-card:: Polycpp HTTP integration
       :margin: 1
 
-      Header-only where possible, zero-overhead abstractions, ``constexpr``
-      and ``std::string_view`` throughout.
+      Request and response boundaries use ``polycpp::http::Headers`` and
+      ``ServerResponse``-style handles instead of local HTTP containers.
 
-   .. grid-item-card:: Tested
+   .. grid-item-card:: Explicit origin modes
       :margin: 1
 
-      The test plan starts from upstream tests and fixtures, then adds C++ integration and regression coverage before release.
+      Wildcard, disabled, fixed, reflected, exact, regex, and predicate origin
+      policies are modeled as typed C++ values.
 
-   .. grid-item-card:: Plays well with polycpp
+   .. grid-item-card:: Companion reuse
       :margin: 1
 
-      Uses the same JSON value, error, and typed-event types as the rest of
-      the polycpp ecosystem - no impedance mismatch.
+      ``Vary`` mutation delegates to ``polycpp::vary`` so CORS does not
+      duplicate header-combination behavior.
 
 Getting started
 ---------------
 
-.. code-block:: bash
+.. code-block:: cmake
 
-   # With FetchContent (recommended)
+   include(FetchContent)
    FetchContent_Declare(
        polycpp_cors
        GIT_REPOSITORY https://github.com/polycpp/cors.git
@@ -47,7 +60,7 @@ Getting started
    FetchContent_MakeAvailable(polycpp_cors)
    target_link_libraries(my_app PRIVATE polycpp::cors)
 
-:doc:`Installation <getting-started/installation>` | :doc:`Quickstart <getting-started/quickstart>` | :doc:`Tutorials <tutorials/index>` | :doc:`API reference <api/index>`
+:doc:`Installation <getting-started/installation>` | :doc:`Quickstart <getting-started/quickstart>` | :doc:`Tutorial <tutorials/cors-policy>` | :doc:`API reference <api/cors>`
 
 .. toctree::
    :hidden:

@@ -1,24 +1,20 @@
 Examples
 ========
 
-Self-contained programs exercising the main features of cors. Each
-released example must compile against the public API only - no private
-headers, no non-exported targets.
+Runnable programs under ``examples/`` use only the public API.
 
 .. toctree::
    :maxdepth: 1
 
-   planned
+   policy
 
-Running an example
-------------------
+Running examples
+----------------
 
 From the repository root:
 
 .. code-block:: bash
 
-   cmake -B build -G Ninja
-   cmake --build build --target <example_name>
-   ./build/examples/<example_name>
-
-Examples are only built when ``POLYCPP_CORS_BUILD_EXAMPLES=ON`` is passed to CMake.
+   cmake -B build -G Ninja -DPOLYCPP_CORS_BUILD_EXAMPLES=ON
+   cmake --build build --target policy
+   ./build/examples/policy

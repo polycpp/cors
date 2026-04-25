@@ -1,9 +1,9 @@
 Installation
 ============
 
-cors targets C++20 and builds with clang >= 14 or gcc >= 11. It depends
-only on the base `polycpp <https://github.com/enricohuang/polycpp>`_ library
-(and none).
+cors targets C++20 and builds with clang >= 14 or gcc >= 11. It depends on the
+base `polycpp <https://github.com/enricohuang/polycpp>`_ library and the
+``polycpp::vary`` companion library.
 
 CMake FetchContent (recommended)
 --------------------------------
@@ -24,29 +24,24 @@ Add the library to your ``CMakeLists.txt``:
    add_executable(my_app main.cpp)
    target_link_libraries(my_app PRIVATE polycpp::cors)
 
-The first configure pulls ``polycpp`` transitively, so the build tree may be
-large. Pin ``GIT_TAG`` to a specific commit for reproducible builds.
+The first configure pulls ``polycpp`` and ``polycpp::vary`` transitively, so the
+build tree may be large. Pin ``GIT_TAG`` to a specific commit for reproducible
+builds.
 
-Using a local clone
--------------------
+Using local clones
+------------------
 
-If you already have cors and polycpp checked out side by side, tell
-CMake to use them instead of fetching from GitHub:
+If you already have cors, vary, and polycpp checked out locally, tell CMake to
+use them instead of fetching from GitHub:
 
 .. code-block:: bash
 
-   # Building this repo directly
    cmake -B build -G Ninja \
-       -DPOLYCPP_SOURCE_DIR=/path/to/polycpp
+       -DPOLYCPP_SOURCE_DIR=/path/to/polycpp \
+       -DPOLYCPP_VARY_SOURCE_DIR=/path/to/vary
 
-   # Consuming this repo through FetchContent
-   cmake -B build -G Ninja \
-       -DFETCHCONTENT_SOURCE_DIR_POLYCPP=/path/to/polycpp \
-       -DFETCHCONTENT_SOURCE_DIR_POLYCPP_CORS=/path/to/cors
-
-This is the path local validation can use when testing a port beside a
-polycpp checkout - see ``tests/`` in the repo. The generated CMake also uses
-``/data/repo/polycpp`` automatically when that checkout exists.
+This repo also uses ``/data/repo/polycpp`` and ``/data/work/lib/vary``
+automatically when those local checkouts exist.
 
 Build options
 -------------
@@ -55,25 +50,23 @@ Build options
     Build the GoogleTest suite. Defaults to ``ON`` for standalone builds and
     ``OFF`` when consumed via FetchContent.
 
-``POLYCPP_IO``
-    ``asio`` (default) or ``libuv`` - inherited from polycpp.
+``POLYCPP_CORS_BUILD_EXAMPLES``
+    Build runnable examples under ``examples/``. Defaults to ``OFF``.
 
-``POLYCPP_SSL_BACKEND``
-    ``boringssl`` (default) or ``openssl``.
+``POLYCPP_SOURCE_DIR``
+    Optional local base polycpp checkout.
 
-``POLYCPP_UNICODE``
-    ``icu`` (recommended) or ``builtin``. ICU enables the Intl surface that
-    several polycpp headers pull into their public signatures.
+``POLYCPP_VARY_SOURCE_DIR``
+    Optional local ``polycpp::vary`` checkout.
 
 Verifying the install
 ---------------------
 
 .. code-block:: bash
 
-   cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-   cmake --build build
+   cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPOLYCPP_CORS_BUILD_EXAMPLES=ON
+   cmake --build build -j$(nproc)
    ctest --test-dir build --output-on-failure
+   ./build/examples/policy
 
-All tests should pass on a supported toolchain - if they do not, open an
-issue on the `repository <https://github.com/polycpp/cors/issues>`_
-with the compiler version and the failing test name.
+All tests should pass on a supported toolchain.
