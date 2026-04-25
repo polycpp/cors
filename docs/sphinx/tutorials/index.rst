@@ -1,10 +1,9 @@
 Tutorials
 =========
 
-Longer-form, narrative walkthroughs. Each tutorial builds up a working
-example step by step - skim the titles, pick what matches your task.
+Task-oriented walkthroughs for ``polycpp::cors`` policy evaluation.
 
 .. toctree::
    :maxdepth: 1
 
-   planned
+   cors-policy

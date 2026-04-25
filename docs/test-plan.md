@@ -31,7 +31,7 @@
 
 ## Security and fail-closed tests
 
-- Invalid reflected header values throw through `polycpp::http::Headers` validation before caller-owned headers are mutated.
+- Invalid configured response header values throw through `polycpp::http::Headers` validation before caller-owned headers are mutated.
 - Origin disabled emits no CORS headers.
 - Non-matching origin allow-list does not emit `Access-Control-Allow-Origin`.
 - Preflight short-circuit always sets `Content-Length: 0`.
@@ -47,4 +47,7 @@
 
 ## Current validation
 
-- pending implementation
+- `cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPOLYCPP_CORS_BUILD_EXAMPLES=ON` completed successfully on GCC 11.4.0.
+- `cmake --build build -j$(nproc)` completed successfully.
+- `ctest --test-dir build --output-on-failure` passed 14/14 tests.
+- `./build/examples/policy` ran successfully and printed the expected status/origin/credentials values.

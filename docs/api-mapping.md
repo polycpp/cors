@@ -9,7 +9,7 @@
 | `req.headers['access-control-request-headers']` | `RequestView::headers.get("Access-Control-Request-Headers")` | adapted | Reflected for preflight when `allowed_headers` is absent. |
 | `res.setHeader(name, value)` | `polycpp::cors::apply(result, polycpp::http::Headers&)` and response adapter | adapted | Header mutation uses base `polycpp::http::Headers` or response-like `setHeader`. |
 | `res.statusCode = optionsSuccessStatus` | `CorsResult::status_code` and response adapter `status(code)` | adapted | Pure result records status; response adapter sets it only when preflight short-circuits. |
-| `res.end()` | `CorsResult::end_response` and response adapter `end()` | adapted | Pure result records the control-flow decision; adapter can finish a `ServerResponse`. |
+| `res.end()` | `CorsResult::should_end_response` and response adapter `end()` | adapted | Pure result records the control-flow decision; adapter can finish a `ServerResponse`. |
 | `options.origin = '*'` | `OriginSetting::any()` | direct | Default behavior; emits `Access-Control-Allow-Origin: *` and no `Vary: Origin`. |
 | `options.origin = false` | `OriginSetting::disabled()` | direct | Disables CORS header generation. |
 | `options.origin = true` | `OriginSetting::reflect()` | direct | Reflects request origin and adds `Vary: Origin`. |

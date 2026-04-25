@@ -1,6 +1,6 @@
 # polycpp-cors
 
-C++ port of [cors](https://www.npmjs.com/package/cors) for [polycpp](https://github.com/enricohuang/polycpp).
+C++ companion port of [cors](https://www.npmjs.com/package/cors) for [polycpp](https://github.com/enricohuang/polycpp).
 
 ## Status
 
@@ -15,15 +15,25 @@ Compatibility note:
 
 Implemented:
 
-- Planning only. Implementation has not started.
+- Default wildcard CORS policy.
+- Disabled, fixed, reflected, exact, regex, and predicate origin policies.
+- Methods, allowed headers, exposed headers, credentials, max-age, preflight continue, and custom OPTIONS success status.
+- Pure policy evaluation through `CorsResult`.
+- Application to `polycpp::http::Headers`.
+- Template adapters for `IncomingMessage`/`ServerResponse`-style objects.
+- `Vary` mutation through the existing `polycpp::vary` companion library.
 
 Deferred:
 
-- Full feature list is tracked in `docs/divergences.md`.
+- Express/Connect middleware registration API.
+- Asynchronous JavaScript option callbacks and callback error propagation.
+- Browser CORS enforcement.
+- Full live Express integration until the `express` companion middleware ABI is stable.
 
 Known divergences:
 
-- None recorded yet beyond the planned `v0` scope. See `docs/divergences.md`.
+- The C++ API is explicit and synchronous: `CorsOptions`, `OriginSetting`, `OriginMatcher`, `evaluate`, `apply`, and `handle` replace the JavaScript middleware factory shape.
+- Dynamic JavaScript option shapes are represented as typed C++ configuration values.
 
 ## Prerequisites
 
@@ -34,16 +44,47 @@ Known divergences:
 ## Build
 
 ```bash
-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DPOLYCPP_CORS_BUILD_EXAMPLES=ON
 cmake --build build -j$(nproc)
-cd build && ctest --output-on-failure
+ctest --test-dir build --output-on-failure
 ```
 
 ## Usage
 
 ```cpp
-// Usage examples will be added after the first implemented API slice.
+#include <polycpp/cors/cors.hpp>
+
+int main() {
+    polycpp::http::Headers request_headers;
+    request_headers.set("Origin", "https://app.example");
+    request_headers.set("Access-Control-Request-Headers", "x-api-key");
+
+    polycpp::cors::CorsOptions options;
+    options.origin = polycpp::cors::OriginSetting::reflect();
+    options.credentials = true;
+    options.max_age = 600;
+
+    auto result = polycpp::cors::evaluate("OPTIONS", request_headers, options);
+
+    // result.status_code == 204
+    // result.should_end_response == true
+    // result.headers contains Access-Control-Allow-Origin, credentials,
+    // Access-Control-Allow-Methods, Access-Control-Allow-Headers,
+    // Access-Control-Max-Age, Vary, and Content-Length.
+}
 ```
+
+To mutate an existing response header object:
+
+```cpp
+polycpp::http::Headers response_headers;
+auto result = polycpp::cors::apply(
+    polycpp::cors::RequestView{"GET", request_headers},
+    response_headers,
+    options);
+```
+
+For a `ServerResponse`-style object exposing `setHeader`, `status`, and `end`, use `polycpp::cors::handle(request, response, options)`.
 
 ## License
 
