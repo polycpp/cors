@@ -95,7 +95,7 @@ Tests, fixtures, examples, and docs directories:
 - public header layout: `include/polycpp/cors/cors.hpp`
 - detail/private header strategy: `include/polycpp/cors/detail/aggregator.hpp` for template adapters and small inline helpers
 - aggregator header strategy: keep the public header as the main include and include the detail aggregator at the end, matching `vary`
-- examples strategy: provide a small policy/evaluation example rather than an Express server example in v0
+- examples strategy: provide a small policy/evaluation example rather than an Express server example in 1.0.0
 - documentation site strategy: use libgen Doxygen plus Sphinx scaffold and replace placeholder user pages before public release
 - deliberate deviations from existing companions: add a dedicated `CorsResult` pure-evaluation type so behavior can be tested without a live HTTP server
 
@@ -106,7 +106,7 @@ Tests, fixtures, examples, and docs directories:
 - polycpp core types/functions rejected: local HTTP header/request/response containers are rejected because the base library already provides these concepts
 - companion libs inspected for reusable APIs: `polycpp/vary`
 - companion libs selected for reuse: `polycpp::vary::vary(polycpp::http::Headers&, ...)` for `Vary` mutation
-- companion libs rejected or deferred: none for v0; `object-assign` is not a reusable C++ companion candidate because C++ option merging is direct struct copy/defaulting
+- companion libs rejected or deferred: none for 1.0.0; `object-assign` is not a reusable C++ companion candidate because C++ option merging is direct struct copy/defaulting
 - new local abstractions introduced: `CorsOptions`, `OriginSetting`, `OriginMatcher`, `RequestView`, and `CorsResult`; these are policy/result types, not replacement HTTP containers
 - reuse risks or integration gaps: `polycpp::http::Headers::get()` comma-joins values with comma-space, so tests should assert CORS-visible behavior rather than raw JS object storage
 
@@ -150,12 +150,12 @@ Tests, fixtures, examples, and docs directories:
 - Browser-side CORS enforcement or fetch integration.
 - Full Express integration tests until the `express` companion has a stable middleware ABI.
 
-## v0 scope
+## 1.0.0 scope
 
-- port version: 0.1.0
+- port version: 1.0.0
 - versioning note: port version is independent from upstream versioning
 - supported APIs: `CorsOptions`, `OriginSetting`, `OriginMatcher`, `RequestView`, `CorsResult`, `evaluate`, `apply`, and `handle`
 - unsupported APIs: JavaScript middleware factory shape, asynchronous delegates, Node callback error propagation, and Express app registration
 - dependency plan: reuse `polycpp::vary`; implement `object-assign` behavior as direct C++ option/default merging
 - polycpp modules to use: `polycpp::http::Headers`, `polycpp::http::IncomingMessage`, `polycpp::http::ServerResponse`, `polycpp::TypeError`
-- missing polycpp primitives: no missing primitive for v0; future Express integration may need a shared middleware ABI
+- missing polycpp primitives: no missing primitive for 1.0.0; future Express integration may need a shared middleware ABI

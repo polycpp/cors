@@ -3,7 +3,7 @@
 /**
  * @file detail/aggregator.hpp
  * @brief Template adapters for polycpp/cors.
- * @since 0.1.0
+ * @since 1.0.0
  */
 
 #include <polycpp/cors/cors.hpp>
@@ -39,13 +39,25 @@ inline void set_result_header(Response& response, const std::string& name, const
 
 namespace polycpp::cors {
 
-/** @brief Evaluate policy from an IncomingMessage-style request object. */
+/**
+ * @brief Evaluate policy from an IncomingMessage-style request object.
+ *
+ * The request object must expose method() and headers() members compatible with
+ * std::string_view and polycpp::http::Headers respectively.
+ */
 template <typename Request>
 CorsResult evaluate(const Request& request, const CorsOptions& options = {}) {
     return evaluate(RequestView{request.method(), request.headers()}, options);
 }
 
-/** @brief Apply an evaluated result to a ServerResponse-style object. */
+/**
+ * @brief Apply an evaluated result to a ServerResponse-style object.
+ *
+ * The response object must expose setHeader(name, value). If the result ends
+ * the response, it must also expose status(code) and end().
+ *
+ * @return true when downstream handling should continue.
+ */
 template <typename Response>
 bool apply(const CorsResult& result, Response& response) {
     for (const auto& [name, value] : result.headers.raw()) {
@@ -60,7 +72,11 @@ bool apply(const CorsResult& result, Response& response) {
     return result.should_continue;
 }
 
-/** @brief Evaluate and apply CORS policy to ServerResponse-style objects. */
+/**
+ * @brief Evaluate and apply CORS policy to request/response-style objects.
+ *
+ * @return true when downstream handling should continue.
+ */
 template <typename Request, typename Response>
 bool handle(const Request& request, Response& response, const CorsOptions& options = {}) {
     return apply(evaluate(request, options), response);

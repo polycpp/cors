@@ -12,7 +12,7 @@ Legend:
 
 - [x] target repo scaffolded
 - [x] GitHub repo created under `polycpp`
-- [x] GitHub repo visibility verified private
+- [x] GitHub repo visibility verified public
 - GitHub repo URL: https://github.com/polycpp/cors
 - GitHub repo private: no
 - [x] baseline readiness passed
@@ -60,7 +60,7 @@ Legend:
 
 ## Scope
 
-- [x] `v0` scope written in `docs/research.md`
+- [x] `1.0.0` scope written in `docs/research.md`
 - [x] deferred features listed in `docs/divergences.md`
 - [x] `polycpp` module dependencies listed
 - [x] missing `polycpp` primitives listed
@@ -69,7 +69,7 @@ Legend:
 
 ## API Mapping
 
-- [x] major public `v0` APIs mapped
+- [x] major public `1.0.0` APIs mapped
 - [x] direct vs adapted vs deferred status recorded
 - [x] dynamic typing adaptations recorded
 - [x] framework object boundary reviewed

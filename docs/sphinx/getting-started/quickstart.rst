@@ -47,3 +47,21 @@ Key behavior
 - ``OriginSetting::reflect`` mirrors the request ``Origin`` and adds ``Vary: Origin``.
 - Missing ``allowed_headers`` reflects ``Access-Control-Request-Headers`` and adds ``Vary: Access-Control-Request-Headers``.
 - ``credentials=true`` emits ``Access-Control-Allow-Credentials: true``.
+
+Applying headers
+----------------
+
+``evaluate`` returns a pure result. To merge that result into an existing
+``polycpp::http::Headers`` response object, call ``apply``:
+
+.. code-block:: cpp
+
+   polycpp::http::Headers response_headers;
+   auto applied = polycpp::cors::apply(
+       polycpp::cors::RequestView{"OPTIONS", request_headers},
+       response_headers,
+       options);
+
+   if (applied.should_end_response) {
+       // Send applied.status_code and end the response body.
+   }

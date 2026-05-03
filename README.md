@@ -4,7 +4,7 @@ C++ companion port of [cors](https://www.npmjs.com/package/cors) for [polycpp](h
 
 ## Status
 
-Port version: `0.1.0`
+Port version: `1.0.0`
 
 Initial port based on upstream version: `2.8.6`
 
@@ -49,6 +49,22 @@ cmake --build build -j$(nproc)
 ctest --test-dir build --output-on-failure
 ```
 
+## CMake Usage
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+    polycpp_cors
+    GIT_REPOSITORY https://github.com/polycpp/cors.git
+    GIT_TAG        master
+)
+FetchContent_MakeAvailable(polycpp_cors)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE polycpp::cors)
+```
+
 ## Usage
 
 ```cpp
@@ -85,6 +101,14 @@ auto result = polycpp::cors::apply(
 ```
 
 For a `ServerResponse`-style object exposing `setHeader`, `status`, and `end`, use `polycpp::cors::handle(request, response, options)`.
+
+## Behavior Notes
+
+- `evaluate` builds a `CorsResult` without mutating caller-owned response state.
+- `apply` merges generated headers into `polycpp::http::Headers` and preserves existing `Vary` values through `polycpp::vary`.
+- `handle` returns `false` when a default preflight response has been completed and downstream handling should stop.
+- Missing `allowed_headers` reflects `Access-Control-Request-Headers` during preflight; an explicitly empty list emits no allow-header.
+- `OriginSetting::allow_list(...)` reflects matching request origins and still adds `Vary: Origin` for non-matching origins.
 
 ## License
 

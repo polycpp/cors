@@ -54,3 +54,21 @@ Response-like adapters
 
 These adapters are intended for ``polycpp::http::IncomingMessage`` and
 ``polycpp::http::ServerResponse``-style handles.
+
+Control-flow conventions
+------------------------
+
+``CorsResult::should_continue`` is the downstream routing decision. It is
+``false`` for default preflight handling and ``true`` for normal requests,
+disabled CORS, and preflights configured with ``preflight_continue=true``.
+
+``CorsResult::should_end_response`` tells response adapters whether to call
+``status(result.status_code)`` and ``end()``. Pure ``apply(result, headers)``
+does not end a response because it only mutates a header container.
+
+Mutation ordering
+-----------------
+
+``evaluate`` constructs all generated headers in a local ``CorsResult``. The
+``apply(request, headers, options)`` overload evaluates first and mutates the
+caller-owned header object only after result construction succeeds.
