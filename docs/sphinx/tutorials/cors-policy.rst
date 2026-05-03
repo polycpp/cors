@@ -1,4 +1,4 @@
-Evaluate And Apply CORS Policy
+Evaluate and Apply CORS Policy
 ==============================
 
 Start with incoming request headers:

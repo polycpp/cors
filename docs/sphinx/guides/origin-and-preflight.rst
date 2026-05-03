@@ -1,4 +1,4 @@
-Origin And Preflight Semantics
+Origin and Preflight Semantics
 ==============================
 
 Origin policies

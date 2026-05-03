@@ -20,6 +20,20 @@ adapters.
 
    auto result = polycpp::cors::evaluate("GET", request_headers, options);
 
+Choose the API shape that matches your integration point:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Use
+     - When
+   * - ``evaluate``
+     - You want a pure ``CorsResult`` for tests, custom servers, or staged response handling.
+   * - ``apply``
+     - You already have a ``polycpp::http::Headers`` response object to mutate.
+   * - ``handle``
+     - You have request/response-like objects and want default preflight responses ended for you.
+
 .. grid:: 2
 
    .. grid-item-card:: Pure policy result
@@ -58,9 +72,11 @@ Getting started
        GIT_TAG        master
    )
    FetchContent_MakeAvailable(polycpp_cors)
+
+   add_executable(my_app main.cpp)
    target_link_libraries(my_app PRIVATE polycpp::cors)
 
-:doc:`Installation <getting-started/installation>` | :doc:`Quickstart <getting-started/quickstart>` | :doc:`Tutorial <tutorials/cors-policy>` | :doc:`API reference <api/cors>`
+:doc:`Installation <getting-started/installation>` | :doc:`Quickstart <getting-started/quickstart>` | :doc:`Scope <guides/compatibility-and-scope>` | :doc:`Tutorial <tutorials/cors-policy>` | :doc:`API reference <api/cors>`
 
 .. toctree::
    :hidden:

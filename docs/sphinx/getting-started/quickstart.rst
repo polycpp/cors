@@ -4,6 +4,15 @@ Quickstart
 This example evaluates a reflected-origin preflight request without starting a
 server.
 
+Which function should I start with?
+-----------------------------------
+
+``evaluate`` is the safest first API because it returns the generated headers
+and routing decision without mutating a response object. Move to ``apply`` when
+you want those headers merged into ``polycpp::http::Headers``. Use ``handle``
+when your framework object exposes request/response methods and you want the
+default preflight response ended automatically.
+
 Program
 -------
 
@@ -65,3 +74,10 @@ Applying headers
    if (applied.should_end_response) {
        // Send applied.status_code and end the response body.
    }
+
+Next steps
+----------
+
+- :doc:`Origin and preflight semantics <../guides/origin-and-preflight>` explains every generated header.
+- :doc:`Compatibility and scope <../guides/compatibility-and-scope>` explains where this C++ port intentionally differs from npm ``cors``.
+- :doc:`API reference <../api/cors>` lists the public types and overloads.
