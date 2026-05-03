@@ -10,7 +10,7 @@ Run `scripts/analyze-upstream-js.py` after upstream intake, then consume `.tmp/d
 - published npm artifact analyzed: not needed for this package because declared entry points exist in the source clone
 - include dev dependencies: no
 - dependency source install used: yes, analyzer installed runtime dependencies in a temporary npm analysis directory
-- companion root checked: `polycpp companion repositories`
+- companion root checked: polycpp companion repositories
 
 ## Package entry metadata
 

@@ -43,7 +43,7 @@
 - Example compiles and runs.
 - README examples match actual code.
 - `python3 docs/build.py` passes.
-- `python3 check-port-validation.py --run-docs-build <repo-root>` passes.
+- `check-port-validation.py --run-docs-build <repo-root>` passes.
 
 ## Current validation
 

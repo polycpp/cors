@@ -12,10 +12,6 @@ set(POLYCPP_VARY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(POLYCPP_SOURCE_DIR "" CACHE PATH "Path to a local polycpp checkout")
 set(POLYCPP_VARY_SOURCE_DIR "" CACHE PATH "Path to a local polycpp/vary checkout")
 
-if(NOT POLYCPP_SOURCE_DIR AND EXISTS "/path/to/polycpp/CMakeLists.txt")
-    set(POLYCPP_SOURCE_DIR "/path/to/polycpp" CACHE PATH "Path to a local polycpp checkout" FORCE)
-endif()
-
 if(POLYCPP_SOURCE_DIR AND EXISTS "${POLYCPP_SOURCE_DIR}/CMakeLists.txt")
     FetchContent_Declare(polycpp SOURCE_DIR "${POLYCPP_SOURCE_DIR}")
 else()
@@ -27,10 +23,6 @@ else()
     )
 endif()
 FetchContent_MakeAvailable(polycpp)
-
-if(NOT POLYCPP_VARY_SOURCE_DIR AND EXISTS "polycpp/vary/CMakeLists.txt")
-    set(POLYCPP_VARY_SOURCE_DIR "polycpp/vary" CACHE PATH "Path to a local polycpp/vary checkout" FORCE)
-endif()
 
 if(POLYCPP_VARY_SOURCE_DIR AND EXISTS "${POLYCPP_VARY_SOURCE_DIR}/CMakeLists.txt")
     FetchContent_Declare(polycpp_vary SOURCE_DIR "${POLYCPP_VARY_SOURCE_DIR}")

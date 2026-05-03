@@ -40,8 +40,8 @@ use them instead of fetching from GitHub:
        -DPOLYCPP_SOURCE_DIR=/path/to/polycpp \
        -DPOLYCPP_VARY_SOURCE_DIR=/path/to/vary
 
-This repo also uses ``/path/to/polycpp`` and ``polycpp/vary``
-automatically when those local checkouts exist.
+If these variables are not set, CMake fetches the dependencies from their
+configured Git remotes.
 
 Build options
 -------------
